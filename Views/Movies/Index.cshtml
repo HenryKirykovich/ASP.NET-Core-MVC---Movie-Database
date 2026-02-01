@@ -1,0 +1,86 @@
+@model MvcMovie.Controllers.MovieGenreViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    var currentSort = ViewData["CurrentSort"] as string;
+    var currentPage = Model.Movies?.PageIndex ?? 1;
+    var totalPages = Model.Movies?.TotalPages ?? 1;
+}
+
+<h1>Movies</h1>
+
+<form asp-action="Index" method="get" class="mb-2">
+    <div class="row g-2 align-items-center">
+        <div class="col-auto">
+            @Html.DropDownList("movieGenre", Model.Genres, "All", new { @class = "form-control" })
+        </div>
+        <div class="col-auto">
+            <input type="text" name="searchString" value="@Model.SearchString" class="form-control" placeholder="Search title..." />
+        </div>
+        <div class="col-auto">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@(currentSort == "" ? "title_desc" : "")" asp-route-movieGenre="@Model.MovieGenre" asp-route-searchString="@Model.SearchString">Title</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@(currentSort == "Date" ? "date_desc" : "Date")" asp-route-movieGenre="@Model.MovieGenre" asp-route-searchString="@Model.SearchString">Release Date</a>
+            </th>
+            <th>Genre</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@(currentSort == "price" ? "price_desc" : "price")" asp-route-movieGenre="@Model.MovieGenre" asp-route-searchString="@Model.SearchString">Price</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@(currentSort == "rating" ? "rating_desc" : "rating")" asp-route-movieGenre="@Model.MovieGenre" asp-route-searchString="@Model.SearchString">Rating</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model.Movies != null)
+    {
+        foreach (var item in Model.Movies)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.ReleaseDate.ToString("d")</td>
+                <td>@item.Genre</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@item.Rating</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(currentPage - 1)" asp-route-sortOrder="@currentSort" asp-route-movieGenre="@Model.MovieGenre" asp-route-searchString="@Model.SearchString">Previous</a>
+        </li>
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(i == currentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-sortOrder="@currentSort" asp-route-movieGenre="@Model.MovieGenre" asp-route-searchString="@Model.SearchString">@i</a>
+            </li>
+        }
+        <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(currentPage + 1)" asp-route-sortOrder="@currentSort" asp-route-movieGenre="@Model.MovieGenre" asp-route-searchString="@Model.SearchString">Next</a>
+        </li>
+    </ul>
+</nav>
