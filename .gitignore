@@ -1,0 +1,37 @@
+# Visual Studio / .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# Build outputs
+*.dll
+*.exe
+*.pdb
+
+# NuGet
+*.nupkg
+.nuget/
+
+# EF DB
+MvcMovie.db
+*.db
+
+# www libraries (restore instead)
+wwwroot/lib/
+
+# Publish
+publish/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
